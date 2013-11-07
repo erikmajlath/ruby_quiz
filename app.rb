@@ -1,7 +1,6 @@
 # require rubygems and sinatra so you can run this application locally with ruby app.rb
 require 'rubygems'
 require 'sinatra'
-require 'sinatra/json'
 require 'json'
 
 DATA_FILE = File.expand_path('../ruby.txt', __FILE__)
