@@ -1,7 +1,6 @@
 # require rubygems and sinatra so you can run this application locally with ruby app.rb
 require 'rubygems'
 require 'sinatra'
-require 'sinatra/json'
 require 'json'
 
 DATA_FILE = File.expand_path('../ruby.txt', __FILE__)
@@ -35,7 +34,7 @@ get '/question' do
   response[:answers] = question[:answers].map do |answer|
     answer[:answer]
   end
-  json(response)
+  response.to_json
 end
 
 post '/answer' do
@@ -46,5 +45,5 @@ post '/answer' do
   end
   correct_answers = correct_answers.map { |a| a[:answer] }
   correct = correct_answers.sort == data['answers'].sort
-  json(:correct => correct)
+  {:correct => correct}.to_json
 end
