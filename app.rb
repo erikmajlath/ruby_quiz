@@ -17,24 +17,5 @@ DB = Mongo::Connection.new.db("quest", :pool_size => 5, :timeout => 5)
     DB.collection(params[:thing]).find.to_a.to_json
   end
 
-  get '/quiz' do
-    JSON.parse(File.read(DATA_FILE)).to_json
-  end
-
-  get '/reformat' do
-    response = JSON.parse(File.read(DATA_FILE))
-
-    File.open(DATA_FILE, 'w'){|f| f.write(response.to_json)}
-  end
-
-  post '/quiz' do
-    data = JSON.parse(File.read(DATA_FILE))
-
-    nextId = data.map{ |item|
-      item[:id]
-    }.max.next
-
-  end
-
 def to_bson_id(id) BSON::ObjectId.from_string(id) end
 def from_bson_id(obj) obj.merge({'_id' => obj['_id'].to_s}) end
