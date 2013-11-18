@@ -1,0 +1,26 @@
+/* custom bootstrap modifications */
+
+body { padding-top: 70px; }
+ul{
+	list-style: none;
+}
+pre{
+	border: none !important;
+}
+.checked{
+	color: #339933;
+	visibility: visible !important;
+}
+.notVisible{
+	visibility: hidden;
+}
+.answer{
+	cursor: pointer;
+}
+.mistakes, .correct{
+	padding: 10px 15px;
+	color: #FFFFFF;
+}
+.stats{
+	position: fixed !important;
+}

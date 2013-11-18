@@ -1,49 +1,40 @@
 # require rubygems and sinatra so you can run this application locally with ruby app.rb
 require 'rubygems'
 require 'sinatra'
+require 'mongo'
 require 'json'
 
-DATA_FILE = File.expand_path('../ruby.txt', __FILE__)
+DB = Mongo::Connection.new.db("quest", :pool_size => 5, :timeout => 5)
+#auth = DB.authenticate('admin', 'Kd3FPI7xjibl')
 
-def parse_data(data)
-  data.split(/^=$/).map do |question_data|
-    parse_question(question_data)
+
+  get '/' do 
+    DB.collection(params[:thing]).find.to_a.map{|t| from_bson_id(t)}.to_json
+    erb :index
   end
-end
 
-def parse_question(question_data)
-  question_text, *answers_data = question_data.split(/^$/).map(&:strip).reject(&:empty?)
-
-  { :question => question_text,
-    :answers => parse_answers(answers_data) }
-end
-
-def parse_answers(answers_data)
-  answers_data.map do |answer_data|
-    { :answer => answer_data.sub(/^\* */,''),
-      :correct => answer_data.start_with?('*') }
+  get '/api/:thing' do
+    DB.collection(params[:thing]).find.to_a.to_json
   end
-end
-QUESTIONS = parse_data(File.read(DATA_FILE))
-get '/question' do
-  id = rand(QUESTIONS.size)
-  question = QUESTIONS[id]
-  response = {}
-  response[:id] = id
-  response[:question] = question[:question]
-  response[:answers] = question[:answers].map do |answer|
-    answer[:answer]
-  end
-  response.to_json
-end
 
-post '/answer' do
-  data = JSON.parse(request.body.read)
-  question = QUESTIONS[data['id']]
-  correct_answers = question[:answers].select do |answer|
-    answer[:correct]
+  get '/quiz' do
+    JSON.parse(File.read(DATA_FILE)).to_json
   end
-  correct_answers = correct_answers.map { |a| a[:answer] }
-  correct = correct_answers.sort == data['answers'].sort
-  {:correct => correct}.to_json
-end
+
+  get '/reformat' do
+    response = JSON.parse(File.read(DATA_FILE))
+
+    File.open(DATA_FILE, 'w'){|f| f.write(response.to_json)}
+  end
+
+  post '/quiz' do
+    data = JSON.parse(File.read(DATA_FILE))
+
+    nextId = data.map{ |item|
+      item[:id]
+    }.max.next
+
+  end
+
+def to_bson_id(id) BSON::ObjectId.from_string(id) end
+def from_bson_id(obj) obj.merge({'_id' => obj['_id'].to_s}) end
