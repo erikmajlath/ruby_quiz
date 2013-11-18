@@ -9,12 +9,12 @@ DB = Mongo::Connection.new.db("quest", :pool_size => 5, :timeout => 5)
 
 
   get '/' do 
-    DB.collection(params[:thing]).find.to_a.map{|t| from_bson_id(t)}.to_json
+    @questions = DB.collection('quiz').find.to_a.map{|t| from_bson_id(t)}.to_json
     erb :index
   end
 
   get '/api/:thing' do
-    DB.collection(params[:thing]).find.to_a.to_json
+    DB.collection(params[:thing]).find.to_a.map{|t| from_bson_id(t)}.to_json
   end
 
 def to_bson_id(id) BSON::ObjectId.from_string(id) end
