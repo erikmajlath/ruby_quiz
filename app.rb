@@ -5,7 +5,7 @@ require 'mongo'
 require 'json'
 
 DB = Mongo::Connection.new.db("quest", :pool_size => 5, :timeout => 5)
-auth = DB.authenticate('admin', 'Kd3FPI7xjibl')
+#auth = DB.authenticate('admin', 'Kd3FPI7xjibl')
 
 
   get '/' do 
