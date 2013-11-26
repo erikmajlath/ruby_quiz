@@ -24,3 +24,9 @@ pre{
 .stats{
 	position: fixed !important;
 }
+.pointer{
+	cursor: pointer;
+}
+.questionBody{
+	margin-bottom: 15px;
+}

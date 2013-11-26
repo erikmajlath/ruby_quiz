@@ -13,8 +13,25 @@ DB = Mongo::Connection.new.db("quest", :pool_size => 5, :timeout => 5)
     erb :index
   end
 
-  get '/api/:thing' do
-    DB.collection(params[:thing]).find.to_a.map{|t| from_bson_id(t)}.to_json
+  get '/quiz' do
+    DB.collection('quiz').find.to_a.map{|t| from_bson_id(t)}.to_json
+  end
+
+  get '/quiz/:id' do
+    from_bson_id(DB.collection('quiz').find_one(to_bson_id(params[:id]))).to_json
+  end
+
+  post '/quiz' do
+    oid = DB.collection('quiz').insert(JSON.parse(request.body.read.to_s))
+    "{\"_id\": \"#{oid.to_s}\"}"
+  end
+
+  delete '/quiz/:id' do
+    DB.collection('quiz').remove('_id' => to_bson_id(params[:id]))
+  end
+
+  put '/quiz/:id' do
+    DB.collection('quiz').update({'_id' => to_bson_id(params[:id])}, {'$set' => JSON.parse(request.body.read.to_s).reject{|k,v| k == '_id'}})
   end
 
 def to_bson_id(id) BSON::ObjectId.from_string(id) end

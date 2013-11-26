@@ -5,6 +5,8 @@ app.QuizView = Backbone.View.extend({
 
 	events:{
 		'click .startButton': 'startQuiz',
+		'click .startAdmin': 'startAdmin',
+		'click .restart': 'restart',
 	},
 
 	initialize: function(){
@@ -24,8 +26,7 @@ app.QuizView = Backbone.View.extend({
 
 		this.collection.good = 0;
 		this.collection.bad = 0;
-
-		//this.collection.fetch();
+		
 	},
 
 	render: function(){
@@ -67,6 +68,20 @@ app.QuizView = Backbone.View.extend({
 		this.renderQuestion();
 	},
 
+	startAdmin: function(){
+		new app.AdminView();
+	},
+
+	restart: function(){
+		this.collection.good = 0;
+		this.collection.bad = 0;
+		this.render();
+		this.collection.forEach(function(item){
+			item.set('done', false);
+		});
+		this.renderQuestion();
+	},
+
 	answerGood: function(){
 		this.collection.good++;
 		this.renderQuestion();
@@ -79,8 +94,4 @@ app.QuizView = Backbone.View.extend({
 		$(".mistakes").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
 	},
 
-	appendMsg: function(text){
-		this.messages.prepend(text);
-		this.messages.find('div').first().fadeOut(2000);
-	}
 });

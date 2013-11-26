@@ -10,6 +10,7 @@
     <script src="js/lib/underscore.js"></script>
     <script src="js/lib/backbone.js"></script>
     <script src="js/lib/mustache.js"></script>
+    <script src="js/lib/bootstrap.js"></script>
 
     <!-- Models -->
     <script src="js/models/question.js"></script>
@@ -17,6 +18,8 @@
     <!-- Collections -->
     <script src="js/collections/quiz.js"></script>
     <!-- Views -->
+    <script src="js/views/admin.js"></script>
+    <script src="js/views/adminQuestion.js"></script>
     <script src="js/views/question.js"></script>
     <script src="js/views/answer.js"></script>
     <script src="js/views/quiz.js"></script>
@@ -49,6 +52,12 @@
         <ul class="nav navbar-nav">
         </ul>
         <div class="nav navbar-nav navbar-right">
+          <li>
+            <a href="#" class="startAdmin">Administraion</a>
+          </li>
+          <li>
+            <a href="#" class="restart">Restart Quiz</a>
+          </li>
         </div>
       </div><!-- /.navbar-collapse -->
     </nav>
@@ -64,12 +73,6 @@
       </div>
     </div>
     <script>
-		$('.statsAffix').affix({
-		    offset: {
-		      top: 10,
-		      bottom: 100 
-		    }
-		})
 
     </script>
 
@@ -93,4 +96,63 @@
       <a class="btn btn-warning btn-lg pull-right">Submit</a>
     </div>
   </script>
+
+  <script type="text/template" id="admin_template">
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Administration</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div>
+          <button type="button" class="btn btn-default btn-success addQuestion">
+            <span class="glyphicon glyphicon-plus"></span>Add question
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </script>
+
+  <script type="text/template" id="admin_question_template">
+    <div class="adminQuestion">
+      <div class="questionHeader clearfix well pointer">
+        <span class="pull-right toggle glyphicon glyphicon-resize-full"></span>
+        <div class="headerQuestion pull-left">{{{headerQuestion}}}</div>        
+      </div>
+      <div class="questionBody clearfix" style="display:none">
+        <textarea class="form-control questionText">{{question}}</textarea>
+        <div class="answers"></div>
+        <hr>
+        <button type="button" class="addAnswer btn btn-default btn-success">
+          <span class="glyphicon glyphicon-plus"></span>Add answer
+          </button>
+        <button type="button" class="btn btn-default btn-danger pull-right removeQuestion">
+          <span class="glyphicon glyphicon-remove"></span>Delete question
+          </button>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/template" id="admin_answer_template">
+    <div class="adminAnswer form-inline">
+        <div class="form-group">
+          <button type="button" class="btn btn-default btn-xs btn-danger removeAnswer">
+          <span class="glyphicon glyphicon-remove"></span>Delete
+          </button>
+        </div>
+        <div class="form-group">
+        <input type="text" value="{{answer}}" class="form-control answerText">
+        </div> 
+        <div class="form-group">
+        <label>
+          <input type="checkbox" class="form-control correct" {{#correct}}checked="true"{{/correct}}> Correct
+        </label>
+        </div>
+    </div>
+  </script>
+
 </html>
