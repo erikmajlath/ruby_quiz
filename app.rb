@@ -4,8 +4,13 @@ require 'sinatra'
 require 'mongo'
 require 'json'
 
-DB = Mongo::Connection.new.db("quest", :pool_size => 5, :timeout => 5)
-#auth = DB.authenticate('admin', 'Kd3FPI7xjibl')
+@dbhost = ENV['OPENSHIFT_MONGODB_DB_HOST']
+@dbport = ENV['OPENSHIFT_MONGODB_DB_PORT']
+@dbuser = ENV['OPENSHIFT_MONGODB_DB_USERNAME']
+@dbpass = ENV['OPENSHIFT_MONGODB_DB_PASSWORD']
+
+DB = Mongo::Connection.new(@dbhost, @dbport).db('quest')
+auth = db.authenticate(@dbuser, @dbpass)
 
 
   get '/' do 
