@@ -10,8 +10,7 @@ require 'json'
 @dbpass = ENV['OPENSHIFT_MONGODB_DB_PASSWORD']
 
 DB = Mongo::Connection.new(@dbhost, @dbport).db('quest')
-auth = db.authenticate(@dbuser, @dbpass)
-
+auth = DB.authenticate(@dbuser, @dbpass)
 
   get '/' do 
     @questions = DB.collection('quiz').find.to_a.map{|t| from_bson_id(t)}.to_json
